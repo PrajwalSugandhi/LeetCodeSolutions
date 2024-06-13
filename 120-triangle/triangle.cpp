@@ -40,7 +40,7 @@ public:
 
     int minimumTotal(vector<vector<int>>& triangle) {
         int m = triangle.size();
-        vector<vector<int>> dp(m, vector<int> (m,INT_MAX));
+        // vector<vector<int>> dp(m, vector<int> (m,INT_MAX));
         int ans=INT_MAX;
         
         // for(int i = 0; i<m; i++){
@@ -48,26 +48,29 @@ public:
         //     ans = min(ans, dp[m-1][i]);
         // }
         int p;
+        vector<int> prev(m);
         for(int i = 0; i<m; i++){
+            vector<int> temp(m, INT_MAX);
             for(int j = 0; j<m; j++){
                 if(i == 0 && j == 0){
-                    dp[i][j] = triangle[i][j];
+                    temp[j] = triangle[i][j];
                     continue;
                 }
                 if(j > i){
                     break;
                 }
                 if(j > 0){
-                    p = min(dp[i-1][j],dp[i-1][j-1]);
+                    p = min(prev[j],prev[j-1]);
                 }
                 else{
-                    p = dp[i-1][j];
+                    p = prev[j];
                 }
-                dp[i][j] = triangle[i][j] + p ;
+                temp[j] = triangle[i][j] + p ;
             }
+            prev = temp;
         }
         for(int i = 0; i<m; i++){
-            ans = min(ans, dp[m-1][i]);
+            ans = min(ans, prev[i]);
         }
         return ans;
     }
