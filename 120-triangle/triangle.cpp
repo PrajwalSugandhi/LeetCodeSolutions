@@ -43,11 +43,32 @@ public:
         vector<vector<int>> dp(m, vector<int> (m,INT_MAX));
         int ans=INT_MAX;
         
+        // for(int i = 0; i<m; i++){
+        //     recur(triangle, dp, m-1, i);
+        //     ans = min(ans, dp[m-1][i]);
+        // }
+        int p;
         for(int i = 0; i<m; i++){
-            recur(triangle, dp, m-1, i);
+            for(int j = 0; j<m; j++){
+                if(i == 0 && j == 0){
+                    dp[i][j] = triangle[i][j];
+                    continue;
+                }
+                if(j > i){
+                    break;
+                }
+                if(j > 0){
+                    p = min(dp[i-1][j],dp[i-1][j-1]);
+                }
+                else{
+                    p = dp[i-1][j];
+                }
+                dp[i][j] = triangle[i][j] + p ;
+            }
+        }
+        for(int i = 0; i<m; i++){
             ans = min(ans, dp[m-1][i]);
         }
-        
         return ans;
     }
 };
