@@ -1,15 +1,12 @@
 class Solution {
 public:
     int minIncrementForUnique(vector<int>& nums) {
-        map<int,int> m;
-        for(auto it : nums){
-            m[it]++;
-        }
+        sort(nums.begin(),nums.end());
         int ans=0;
-        for(auto itr = m.begin(); itr != m.end(); itr++){
-            if(itr->second > 1){
-                ans += itr->second - 1;
-                m[itr->first + 1] += itr->second - 1;
+        for(int i = 1; i<nums.size(); i++){
+            if(nums[i] <= nums[i-1]){
+                ans += (nums[i-1]-nums[i])+1;
+                nums[i] = nums[i-1] + 1;
             }
         }
         return ans;
