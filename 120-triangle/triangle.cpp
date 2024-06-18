@@ -3,34 +3,35 @@ public:
     int minimumTotal(vector<vector<int>>& triangle) {
         vector<vector<int>> dp(triangle.size(), vector<int>(triangle.size(), 1e8));
         int p;
+        vector<int> prev(triangle.size()),curr(triangle.size());
         for(int i = 0; i<triangle.size(); i++){
             for(int j = 0; j<= i; j++){
                 p = 1e8;
                 if(i == 0 && j==0){
-                    dp[i][j] = triangle[i][j];
+                    curr[j] = triangle[i][j];
                     continue;
                 }
                 
                 if(j-1 <= i-1 && j > 0){
-                    p = dp[i-1][j-1];
+                    p = prev[j-1];
                 }
                 if(j <= i-1){
-                    p = min(p , dp[i-1][j]);
+                    p = min(p , prev[j]);
                 }
-                dp[i][j] = triangle[i][j] + p;
-                
+                curr[j] = triangle[i][j] + p; 
             }
+            prev = curr;
         }
         p = INT_MAX;
         for(int j = 0; j<triangle.size(); j++){
-            p = min(p,dp[triangle.size()-1][j]);
+            p = min(p,prev[j]);
         }
-        for(auto it : dp){
-            for(auto k : it){
-                cout<<k<<" ";
-            }
-            cout<<endl;
-        }
+        // for(auto it : dp){
+        //     for(auto k : it){
+        //         cout<<k<<" ";
+        //     }
+        //     cout<<endl;
+        // }
         return p;
     }
 };
