@@ -1,7 +1,34 @@
 class Solution {
 public:
-    int maxProfit(vector<int>& prices) {
+    int recur(vector<int>& prices,int index, int buy,int left,int n, vector<vector<vector<int>>>& dp){
+        if(index == n){
+            return 0;
+        }
+        if(left == 0){
+            return 0;
+        }
+        if(dp[index][buy][left] != -1){
+            return dp[index][buy][left];
+        }
+        if(buy){
+            dp[index][buy][left] = max(recur(prices, index + 1, 0, left, n, dp) - prices[index], 0 + recur(prices, index+1, 1,left, n, dp));
+        }
+        else{
+            dp[index][buy][left] = max(recur(prices, index + 1, 1,left-1, n, dp) + prices[index], 0 + recur(prices, index+1, 0,left, n, dp));
+        }
+        return dp[index][buy][left];
+    }
+
+    int maxProfit(vector<int>& prices){
         int n = prices.size();
+        vector<vector<vector<int>>> dp(n+1 , vector<vector<int>>(2, vector<int>(3, -1)));
+        int ans = recur(prices, 0, 1, 2, n, dp);
+        return ans;
+    }
+
+    int spaceopti_maxProfit(vector<int>& prices) {
+        int n = prices.size();
+        
         // vector<vector<vector<int>>> dp(n+1 , vector<vector<int>>(2, vector<int>(3, -1)));
         vector<vector<int>> next(2, vector<int>(3, -1)), curr(2, vector<int>(3, -1));
         for(int i = 0; i<2; i++){
